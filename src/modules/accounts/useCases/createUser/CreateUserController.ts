@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { CreateUserUseCase } from "./CreateUserUseCase";
+import { UserUseCase } from "./CreateUserUseCase";
 
-class CreateUserController {
-  async handle(req: Request, res: Response): Promise<Response> {
+class UserController {
+  async create(req: Request, res: Response): Promise<Response> {
     const { name, email, password, driver_license } = req.body;
 
-    const createUserUseCase = container.resolve(CreateUserUseCase);
+    const createUserUseCase = container.resolve(UserUseCase);
 
-    await createUserUseCase.execute({
+    await createUserUseCase.create({
       name,
       email,
       password,
@@ -17,6 +17,24 @@ class CreateUserController {
 
     return res.status(201).send();
   }
+
+  async listAll(req: Request, res: Response): Promise<Response> {
+    const createUserUseCase = container.resolve(UserUseCase);
+
+    const users = await createUserUseCase.listAll();
+
+    return res.status(201).json(users);
+  }
+
+  async delete(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const createUserUseCase = container.resolve(UserUseCase);
+
+    await createUserUseCase.delete(id);
+
+    return res.status(201).send();
+  }
 }
 
-export { CreateUserController };
+export { UserController };

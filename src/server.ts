@@ -2,6 +2,7 @@ import "reflect-metadata";
 import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
 import swaggerUI from "swagger-ui-express";
+import cors from "cors";
 
 import { router } from "./routes";
 import swaggerFile from "./swagger.json";
@@ -17,6 +18,7 @@ const app = express();
 
 createConnection();
 
+app.use(cors());
 app.use(express.json());
 app.use(router);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerFile));

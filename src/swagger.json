@@ -8,12 +8,21 @@
       "email": "valdery.jur@gmail.com"
     }
   },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
   "paths": {
-    "/category": {
+    "/user": {
       "post": {
-        "tags": ["Category"],
-        "summary": "Create a category",
-        "description": "Creates a new category",
+        "tags": ["User"],
+        "summary": "Create a user",
+        "description": "Creates a new user",
         "requestBody": {
           "content": {
             "application/json": {
@@ -23,13 +32,21 @@
                   "name": {
                     "type": "string"
                   },
-                  "description": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "driver_license": {
                     "type": "string"
                   }
                 },
                 "example": {
-                  "name": "category name sample",
-                  "description": "Category description sample"
+                  "name": "Teste",
+                  "email": "test@test.com",
+                  "password": "12345",
+                  "driver_license": "932 937 056"
                 }
               }
             }
@@ -40,14 +57,19 @@
             "description": "Created"
           },
           "500": {
-            "description": "Category already exists"
+            "description": "User already exists"
           }
         }
       },
       "get": {
-        "tags": ["Category"],
-        "summary": "List all categories",
-        "description": "Lists all categories",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["User"],
+        "summary": "List all users",
+        "description": "Lists all users",
         "responses": {
           "200": {
             "description": "Success",
@@ -58,10 +80,28 @@
                   "items": {
                     "type": "object",
                     "properties": {
+                      "id": {
+                        "type": "string"
+                      },
                       "name": {
                         "type": "string"
                       },
-                      "description": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "driver_license": {
+                        "type": "string"
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "isAdmin": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
                         "type": "string"
                       }
                     }
@@ -73,67 +113,88 @@
         }
       }
     },
-    "/category/import": {
+    "/user/{user_id}": {
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["User"],
+        "summary": "Delete a user",
+        "description": "Deletes a user",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "type": "string",
+            "required": true,
+            "description": "user id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "User don't exists"
+          }
+        }
+      }
+    },
+    "/sessions": {
       "post": {
-        "tags": ["Category"],
-        "summary": "Upload a new category",
-        "description": "Upload a new category",
+        "tags": ["Authenticate"],
+        "summary": "Login a user",
+        "description": "Logins a user",
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
                   }
+                },
+                "example": {
+                  "email": "test@test.com",
+                  "password": "12345"
                 }
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Created"
-          }
-        }
-      }
-    },
-    "/specification": {
-      "post": {
-        "tags": ["Specification"],
-        "summary": "Create a specification",
-        "description": "Creates a new specification",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/definitions/Specification"
+          "200": {
+            "description": "User authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
-        },
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Category already exists"
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "Specification": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
         }
       }
     }

@@ -22,6 +22,7 @@ class UserRepository implements IUserRepository {
       email,
       driver_license,
       password,
+      isAdmin: false,
     });
 
     await this.repository.save(user);
@@ -43,8 +44,7 @@ class UserRepository implements IUserRepository {
     await this.repository.delete(id);
   }
 
-  async findAll(): Promise<User[]> {
-    console.log("veio aqui");
+  async listAll(): Promise<User[]> {
     return this.repository.find();
   }
 }
