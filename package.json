@@ -1,8 +1,16 @@
 {
   "name": "rocket-node-typescript",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.ts",
+  "author": "Valdery Alves Paes Junior <https://valderyalves.com>",
   "license": "MIT",
+  "keywords": [
+    "mentoria-react",
+    "heroku"
+  ],
+  "engines": {
+    "node": "14.17.4"
+  },
   "scripts": {
     "start": "ts-node-dev --inspect --transpile-only --poll --ignore-watch node_modules --respawn src/server.ts",
     "dev": "ts-node-dev --inspect --transpile-only --poll --ignore-watch node_modules --respawn src/server.ts",
