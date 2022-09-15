@@ -12,7 +12,7 @@ import { createConnection } from "../ormconfig";
 import "./shared/container";
 import { AppError } from "./errors/AppError";
 
-const port = 3333;
+const port = process.env.PORT || 3333;
 
 const app = express();
 
